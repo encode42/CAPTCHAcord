@@ -41,10 +41,25 @@ function onSubmit() {
             const json = await res.json();
             window.location = json.url;
         } else {
-            // Prevent the user from getting stuck
-            window.location.reload(true);
+            // Display an error message
+            displayError(res);
         }
+    }).catch(e => {
+        displayError(e);
     });
+}
+
+function displayError(response) {
+    redirect.innerHTML = "An error occurred. Refresh the page or contact the instance owner.";
+
+    if (response?.error) {
+        console.error(res.error());
+        return;
+    }
+
+    if (!(response instanceof Response)) {
+        console.error(response);
+    }
 }
 
 // Make above functions global
