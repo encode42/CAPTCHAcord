@@ -52,14 +52,15 @@ function onSubmit() {
 function displayError(response) {
     redirect.innerHTML = "An error occurred. Refresh the page or contact the instance owner.";
 
-    if (response?.error) {
-        console.error(res.error());
+    if (response instanceof Response) {
+        if (response.error) {
+            console.error(response.error());
+        }
+
         return;
     }
 
-    if (!(response instanceof Response)) {
-        console.error(response);
-    }
+    console.error(response);
 }
 
 // Make above functions global
