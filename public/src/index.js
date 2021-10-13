@@ -1,4 +1,5 @@
 const form = document.getElementById("form");
+const redirect = document.getElementById("redirect");
 
 // Run the captcha
 window.addEventListener("load", () => {
@@ -15,6 +16,11 @@ window.addEventListener("load", () => {
     form.append(script);
 });
 
+// Method ran when the captcha script is loaded
+async function onLoad() {
+    grecaptcha.execute();
+}
+
 // Method ran when the captcha is submitted
 function onSubmit() {
     const url = form.action;
@@ -29,6 +35,8 @@ function onSubmit() {
         body: JSON.stringify(Object.fromEntries(data.entries()))
     }).then(async res => {
         if (res.ok) {
+            redirect.innerHTML = "Redirecting...";
+
             // Redirect to invite
             const json = await res.json();
             window.location = json.url;
@@ -39,11 +47,6 @@ function onSubmit() {
     });
 }
 
-// Method ran when the captcha script is loaded
-function onLoad() {
-    grecaptcha.execute();
-}
-
 // Make above functions global
-window.onSubmit = onSubmit;
 window.onLoad = onLoad;
+window.onSubmit = onSubmit;

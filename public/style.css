@@ -1,3 +1,33 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
 html {
-    background: #333;
+    background: #36393f;
+}
+
+body {
+    padding: 2.5%;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+h1 {
+    padding-bottom: 1%;
+    font-size: calc(2vw + 2vh);
+    font-family: "Helvetica", sans-serif;
+    color: #fff;
+}
+
+p {
+    font-size: calc(1vw + 1vh);
+    font-family: "Arial", sans-serif;
+    text-align: center;
+    color: #dcddde;
 }
