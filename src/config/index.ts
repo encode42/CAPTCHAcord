@@ -71,7 +71,10 @@ async function init(): Promise<void> {
     // Write the site key to the static files
     const textEncoder = new TextEncoder();
     if (!await exists("public/src/key.js")) {
-        await Deno.writeFile("public/src/key.js", textEncoder.encode(`const siteKey = "${config.recaptcha["site-key"]}";`));
+        await Deno.writeFile("public/src/key.js", textEncoder.encode(
+            "// Automatically generated - delete to refresh!\n" +
+            `const siteKey = "${config.recaptcha["site-key"]}";`
+        ));
     }
 
     console.log("Loaded the configuration files.");
