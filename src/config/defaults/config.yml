@@ -1,0 +1,17 @@
+# Webserver settings
+webserver:
+  # Port the webserver listens on
+  port: 8081
+
+# reCAPTCHA settings
+recaptcha:
+  # Public site key for your reCAPTCHA site. (reCAPTCHA site key)
+  site-key: ""
+
+# Discord settings
+discord:
+  # Guild to create invites for. (Discord guild ID)
+  guild: ""
+
+  # Channel to create invite to. (Discord channel ID)
+  channel: ""

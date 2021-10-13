@@ -1,0 +1,19 @@
+allow:
+- net
+- read
+
+scripts:
+  start:
+    cmd: src/index.ts
+    unstable: true
+    imap: src/imports.json
+    allow:
+      write: public/src/key.js
+
+  watch:
+    cmd: src/index.ts
+    unstable: true
+    imap: src/imports.json
+    watch: true
+    allow:
+      write: public/src/key.js

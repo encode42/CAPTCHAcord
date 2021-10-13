@@ -1,0 +1,3 @@
+# Sensitive files
+/config/
+/public/src/key.js
