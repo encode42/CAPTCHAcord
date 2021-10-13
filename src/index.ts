@@ -1,12 +1,12 @@
-import * as config from "./config/index.ts";
-import * as bot from "./bot/index.ts";
-import * as web from "./web/index.ts";
+import { init as initConfig } from "./config/index.ts";
+import { init as initBot } from "./bot/index.ts";
+import { init as initWeb } from "./web/index.ts";
 
 // Initialize the configuration files
-await config.init();
+await initConfig();
 
 // Start the bot
-await bot.init();
+await initBot();
 
 // Start the webserver
-await web.init();
+await initWeb();

@@ -1,5 +1,5 @@
-import * as fs from "fs/mod.ts";
-import * as yaml from "encoding/yaml.ts";
+import { ensureDir, exists } from "fs/mod.ts";
+import { parse as loadYAML } from "encoding/yaml.ts";
 
 /**
  * Config file interface.
@@ -40,16 +40,16 @@ let tokens: Tokens;
  * Initialize the configuration files.
  */
 async function init(): Promise<void> {
-    await fs.ensureDir("config");
+    await ensureDir("config");
 
     // Copy the default config files
     let createdFiles = false;
-    if (!await fs.exists("config/config.yml")) {
+    if (!await exists("config/config.yml")) {
         await Deno.copyFile("src/config/defaults/config.yml", "config/config.yml");
         createdFiles = true;
     }
 
-    if (!await fs.exists("config/tokens.yml")) {
+    if (!await exists("config/tokens.yml")) {
         await Deno.copyFile("src/config/defaults/tokens.yml", "config/tokens.yml");
         createdFiles = true;
     }
@@ -65,12 +65,12 @@ async function init(): Promise<void> {
     const tokensFile = await Deno.readTextFile("config/tokens.yml");
 
     // Parse the YAML files
-    config = yaml.parse(configFile) as Config;
-    tokens = yaml.parse(tokensFile) as Tokens;
+    config = loadYAML(configFile) as Config;
+    tokens = loadYAML(tokensFile) as Tokens;
 
     // Write the site key to the static files
     const textEncoder = new TextEncoder();
-    if (!await fs.exists("public/src/key.js")) {
+    if (!await exists("public/src/key.js")) {
         await Deno.writeFile("public/src/key.js", textEncoder.encode(`const siteKey = "${config.recaptcha["site-key"]}";`));
     }
 

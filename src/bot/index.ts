@@ -1,4 +1,4 @@
-import { Client, ClientPresence, StatusType, Guild, GatewayIntents } from "harmony/mod.ts";
+import { Client, Guild, GatewayIntents } from "harmony/mod.ts";
 import { config, tokens } from "../config/index.ts";
 
 let client: Client;

@@ -1,20 +1,20 @@
-import * as oak from "oak/mod.ts";
-import * as submit from "./post/submit.ts";
+import { Application, Context, Router } from "oak/mod.ts";
 import { config } from "../config/index.ts";
+import { route as submit } from "./post/submit.ts";
 
-let app: oak.Application;
-let router: oak.Router;
+let app: Application;
+let router: Router;
 
 /**
  * Initialize the web application.
  */
 async function init(): Promise<void> {
     // Create the applications
-    app = new oak.Application();
-    router = new oak.Router();
+    app = new Application();
+    router = new Router();
 
     // Logger
-    app.use(async (context: oak.Context, next: Function) => {
+    app.use(async (context: Context, next: Function) => {
         console.log(`${context.request.ip}: ${context.request.method} ${context.request.url}`);
 
         try {
@@ -25,11 +25,11 @@ async function init(): Promise<void> {
     });
 
     // Dynamic routers
-    submit.route();
+    submit();
     app.use(router.routes());
 
     // Static pages
-    app.use(async (context: oak.Context, next: Function) => {
+    app.use(async (context: Context, next: Function) => {
         try {
             await context.send({
                 root: `${Deno.cwd()}/public`,
@@ -41,7 +41,7 @@ async function init(): Promise<void> {
     });
 
     // Not found
-    app.use(async (context: oak.Context) => {
+    app.use(async (context: Context) => {
         context.response.redirect("/");
     });
 

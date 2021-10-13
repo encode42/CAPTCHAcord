@@ -1,7 +1,7 @@
-import * as oak from "oak/mod.ts";
+import { Context } from "oak/mod.ts";
 import { Request } from "request/mod.ts";
-import { router } from "../index.ts";
 import { create as createInvite } from "../../bot/invite/create.ts";
+import { router } from "../index.ts";
 import { tokens } from "../../config/index.ts";
 
 interface Grecaptcha {
@@ -15,7 +15,7 @@ interface Grecaptcha {
  * Form submit endpoint
  */
 function route(): void {
-    router.post("/submit", async (context: oak.Context) => {
+    router.post("/submit", async (context: Context) => {
         // Request body
         const req = await context.request.body().value;
 
