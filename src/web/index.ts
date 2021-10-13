@@ -13,9 +13,19 @@ async function init(): Promise<void> {
     app = new oak.Application();
     router = new oak.Router();
 
-    submit.route();
+    // Logger
+    app.use(async (context: oak.Context, next: Function) => {
+        console.log(`${context.request.ip}: ${context.request.method} ${context.request.url}`);
 
-    // Default router
+        try {
+            await next();
+        } catch (e) {
+            console.error(e);
+        }
+    });
+
+    // Dynamic routers
+    submit.route();
     app.use(router.routes());
 
     // Static pages
