@@ -29,7 +29,11 @@ let guild: Guild;
 
 // Get the guild
 async function getGuild(): Promise<Guild> {
-    return guild || client.guilds.fetch(config.discord.guild);
+    if (!guild) {
+        guild = await client.guilds.fetch(config.discord.guild);
+    }
+
+    return guild;
 }
 
 export { init, client, getGuild };
