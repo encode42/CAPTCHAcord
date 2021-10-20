@@ -14,7 +14,8 @@ interface Config {
     discord: {
         link: string,
         guild: string,
-        channel: string
+        channel: string,
+        name: string
     }
 }
 
@@ -68,14 +69,7 @@ async function init(): Promise<void> {
     config = loadYAML(configFile) as Config;
     tokens = loadYAML(tokensFile) as Tokens;
 
-    // Write the site key to the static files
-    const textEncoder = new TextEncoder();
-    if (!await exists("public/src/key.js")) {
-        await Deno.writeFile("public/src/key.js", textEncoder.encode(
-            "// Automatically generated - delete to refresh!\n" +
-            `const siteKey = "${config.recaptcha["site-key"]}";`
-        ));
-    }
+
 
     console.log("Loaded the configuration files.");
 }

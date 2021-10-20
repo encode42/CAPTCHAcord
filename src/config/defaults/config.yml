@@ -15,3 +15,7 @@ discord:
 
   # Channel to create invite to. (Discord channel ID)
   channel: ""
+
+  # Override the name of the guild displayed on the website.
+  # Defaults to the guild's display name if blank.
+  name: ""

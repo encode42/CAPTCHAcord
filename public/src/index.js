@@ -14,6 +14,13 @@ window.addEventListener("load", () => {
 
     form.append(captcha);
     form.append(script);
+
+    if (serverName) {
+        const title = document.getElementsByTagName("title")[0];
+        title.innerHTML = `${serverName} - ${title.innerHTML}`;
+    }
+
+    redirect.innerHTML = `You will be redirected${serverName ? ` to ${serverName} ` : ""} after solving a captcha.`;
 });
 
 // Method ran when the captcha script is loaded
@@ -29,9 +36,7 @@ function onSubmit() {
     // Create the invite
     fetch(url, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(Object.fromEntries(data.entries()))
     }).then(async res => {
         if (res.ok) {

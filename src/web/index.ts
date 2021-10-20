@@ -1,6 +1,7 @@
 import { Application, Context, Router } from "oak/mod.ts";
 import { config } from "../config/index.ts";
 import { route as submit } from "./post/submit.ts";
+import { writeKeys } from "../config/static.ts";
 
 let app: Application;
 let router: Router;
@@ -44,6 +45,9 @@ async function init(): Promise<void> {
     app.use(async (context: Context) => {
         context.response.redirect("/");
     });
+
+    // Generate static config files
+    await writeKeys();
 
     app.listen({ port: config.webserver.port });
     console.log("Webserver is now listening to requests!");

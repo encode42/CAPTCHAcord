@@ -2,12 +2,11 @@ import { Client, Guild, GatewayIntents } from "harmony/mod.ts";
 import { config, tokens } from "../config/index.ts";
 
 let client: Client;
-let guild: Guild;
 
 /**
  * Initialize the Discord bot.
  */
-function init(): void {
+async function init(): Promise<void> {
     client = new Client({
         presence: {
             status: "offline"
@@ -20,11 +19,17 @@ function init(): void {
         GatewayIntents.GUILD_INVITES
     ]);
 
-    client.on("ready", async () => {
+    await client.on("ready", async () => {
         console.log("Discord bot is ready!");
-
-        guild = await client.guilds.fetch(config.discord.guild);
     });
 }
 
-export { init, client, guild };
+// Guild cache
+let guild: Guild;
+
+// Get the guild
+async function getGuild(): Promise<Guild> {
+    return guild || client.guilds.fetch(config.discord.guild);
+}
+
+export { init, client, getGuild };
