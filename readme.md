@@ -13,15 +13,26 @@
 </div>
 
 ## 🔧 Setup
-1. Install [Deno](https://deno.land/). This is what the service is built on, and therefore is required!
+This guide is targeted towards knowledgeable Linux and Discord users.
+
+1. Install [Deno](https://deno.land/). This is what the application is built on, and therefore is required!
 2. (optional) Install [Velociraptor](https://velociraptor.run/). This allows the usage of pre-made start scripts.
-3. Clone and run the application at least once. This will copy the default configuration files.
+3. `git clone` the repository and run the application at least once via `start.sh`. This will copy the default configuration files.
 4. Configure the application. You're mostly on your own on this but here's the gist:
   - Create a **v2 invisible** [reCAPTCHA site](https://www.google.com/recaptcha/admin/create) and copy its public and private keys into `config.yml` and `tokens.yml` respectively.
   - Create a [Discord bot token](https://www.writebots.com/discord-bot-token/) and copy its token into `tokens.yml`.
   - Invite the bot to your server with the `Create Instant Invite` permission only. Only one server per instance!
   - Fill out the guild and channel IDs in `config.yml`.
 5. Start it up! Remove all existing invite links from the server and redirect new members to the CAPTCHAcord site instance!
+
+## ⚙️ Updating
+Updating the application is extremely easy!
+
+As always, you're recommended to create a backup of your instance first, but everything should be fine.
+
+1. Enter the terminal and navigate to the target instance.
+2. Run `git pull` and wait for it to complete. If you encounter merge conflicts, you must resolve them before continuing.
+3. Restart the target instance! Customizations to the `public` and `config` directories should be left alone.
 
 ## ❔ FAQ
 <details>
