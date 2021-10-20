@@ -8,13 +8,13 @@
 <div align="right">
 
 # CAPTCHAcord
-### A single-instance portal to automatically create single-use Discord invites after solving a captcha. Useful for large public servers that need to prevent spam bots, or non-humans in general, from joining their server and wreaking havoc.
+### A single-instance portal to automatically create single-use Discord invites after solving a captcha. Useful for large public servers that need to prevent spam-bots, or non-humans in general, from joining their server and wreaking havoc.
 [![][Codacy Badge]][Codacy] [![][Discord Badge]][Support]
 </div>
 
 ## 🔧 Setup
 1. Install [Deno](https://deno.land/). This is what the service is built on, and therefore is required!
-2. (optional) Intall [Velociraptor](https://velociraptor.run/). This allows the usage of pre-made start scripts.
+2. (optional) Install [Velociraptor](https://velociraptor.run/). This allows the usage of pre-made start scripts.
 3. Clone and run the application at least once. This will copy the default configuration files.
 4. Configure the application. You're mostly on your own on this but here's the gist:
   - Create a **v2 invisible** [reCAPTCHA site](https://www.google.com/recaptcha/admin/create) and copy its public and private keys into `config.yml` and `tokens.yml` respectively.
