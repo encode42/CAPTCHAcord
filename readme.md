@@ -23,7 +23,7 @@ This guide is targeted towards knowledgeable Linux and Discord users.
   - Create a [Discord bot token](https://www.writebots.com/discord-bot-token/) and copy its token into `tokens.yml`.
   - Invite the bot to your server with the `Create Instant Invite` permission only. Only one server per instance!
   - Fill out the guild and channel IDs in `config.yml`.
-5. Start it up! Remove all existing invite links from the server and redirect new members to the CAPTCHAcord site instance!
+5. Start it up! Remove all existing invite links from the server, dissallow creation of new invites, and redirect new members to the CAPTCHAcord site instance!
 
 ## ⚙️ Updating
 Updating the application is extremely easy!
