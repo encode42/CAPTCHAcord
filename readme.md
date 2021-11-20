@@ -8,7 +8,7 @@
 <div align="right">
 
 # CAPTCHAcord
-### A single-instance portal to automatically create single-use Discord invites after solving a captcha. Useful for large public servers that need to prevent spam-bots, or non-humans in general, from joining their server and wreaking havoc.
+### A multi-use portal to automatically create single-use Discord invites after solving a captcha. Useful for large public servers that need to prevent spam-bots, or non-humans in general, from joining their server and wreaking havoc.
 [![][Codacy Badge]][Codacy] [![][Discord Badge]][Support]
 </div>
 
@@ -21,9 +21,9 @@ This guide is targeted towards knowledgeable Linux and Discord users.
 4. Configure the application. You're mostly on your own on this but here's the gist:
   - Create a **v2 invisible** [reCAPTCHA site](https://www.google.com/recaptcha/admin/create) and copy its public and private keys into `config.yml` and `tokens.yml` respectively.
   - Create a [Discord bot token](https://www.writebots.com/discord-bot-token/) and copy its token into `tokens.yml`.
-  - Invite the bot to your server with the `Create Instant Invite` permission only. Only one server per instance!
-  - Fill out the guild and channel IDs in `config.yml`.
-5. Start it up! Remove all existing invite links from the server, dissallow creation of new invites, and redirect new members to the CAPTCHAcord site instance!
+  - Invite the bot to your servers with the `Create Instant Invite` permission only.
+  - Fill out the information for your guilds in `config.yml`.
+5. Start it up! Remove all existing invite links from your servers, dissallow creation of new invites, and redirect new members to the CAPTCHAcord site instance!
 
 ## ⚙️ Updating
 Updating the application is extremely easy!
