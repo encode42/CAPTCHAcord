@@ -41,7 +41,7 @@ async function init(): Promise<void> {
 
 function getForwardedIP(request: Request) {
     const forwardedHeader = request.headers.get("X-Forwarded-For");
-    return forwardedHeader || request.ip;
+    return forwardedHeader?.split(", ")[0] || request.ip;
 }
 
 export { init, app, router, getForwardedIP };
