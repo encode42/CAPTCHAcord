@@ -30,6 +30,8 @@ async function onLoad() {
 
 // Method ran when the captcha is submitted
 function onSubmit() {
+    redirect.innerHTML = "Redirecting...";
+
     const url = form.action;
     const data = new FormData(form);
     data.append("key", key);
@@ -47,8 +49,6 @@ function onSubmit() {
                 // The invite already exists
                 redirect.innerHTML = "Redirecting to existing invite...";
                 await new Promise(resolve => setTimeout(resolve, 1250));
-            } else {
-                redirect.innerHTML = "Redirecting...";
             }
 
             // Redirect to invite

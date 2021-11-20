@@ -51,10 +51,10 @@ async function generate() {
         // Generate site data
         if (script) {
             script.innerHTML = `
-            const siteKey = "${config.recaptcha["site-key"]}";
-            const serverName = "${value?.name || (await getGuild(key)).name}";
-            const key = "${key}";
-        `;
+                const siteKey = "${config.recaptcha["site-key"]}";
+                const serverName = "${value?.name || (await getGuild(key)).name}";
+                const key = "${key}";
+            `;
         }
 
         // Import the script
