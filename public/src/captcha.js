@@ -29,7 +29,7 @@ async function onLoad() {
 }
 
 // Method ran when the captcha is submitted
-function onSubmit() {
+async function onSubmit() {
     redirect.innerHTML = "Redirecting...";
 
     const url = form.action;
