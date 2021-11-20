@@ -1,9 +1,9 @@
 import { Context } from "oak/mod.ts";
 import { Request } from "request/mod.ts";
 import TTL from "ttl/mod.ts";
-import { create as createInvite } from "../../bot/invite/create.ts";
-import { router } from "../index.ts";
-import { config, tokens } from "../../config/index.ts";
+import { create as createInvite } from "../../../bot/invite/create.ts";
+import { router } from "../../index.ts";
+import { config, tokens } from "../../../config/index.ts";
 
 interface Grecaptcha {
     success: boolean,
