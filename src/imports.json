@@ -4,6 +4,7 @@
     "fs/": "https://deno.land/std@0.115.1/fs/",
     "harmony/": "https://deno.land/x/harmony@v2.3.0/",
     "oak/": "https://deno.land/x/oak@v10.0.0/",
+    "dom/": "https://deno.land/x/deno_dom@v0.1.19-alpha/",
     "request/": "https://deno.land/x/request@1.3.2/",
     "ttl/": "https://deno.land/x/ttl@1.0.1/"
   }

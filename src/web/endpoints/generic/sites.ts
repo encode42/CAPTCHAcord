@@ -1,4 +1,5 @@
 import { Context } from "oak/mod.ts";
+import { DOMParser } from "dom/deno-dom-wasm.ts";
 import { app } from "../../index.ts";
 import { config, Guild } from "../../../config/index.ts";
 import { getGuild } from "../../../bot/index.ts";
@@ -14,18 +15,19 @@ async function route(): Promise<void> {
 
         // Generate site data
         const page = Deno.readTextFileSync(`${Deno.cwd()}/public/endpoint.html`);
-        const script = `
-            <script>
-                    const siteKey = "${config.recaptcha["site-key"]}";
-                    const serverName = "${value?.name || (await getGuild(key)).name}";
-                    const key = "${key}";
-            </script>
-        `
+        const document = new DOMParser().parseFromString(page, "text/html");
+        const script = document?.getElementById("data-script");
+        if (script) {
+            script.innerHTML = `
+                const siteKey = "${config.recaptcha["site-key"]}";
+                const serverName = "${value?.name || (await getGuild(key)).name}";
+                const key = "${key}";
+            `;
+        }
 
         // Import the script
-        const replaced = page.replace("%dataScript", script);
         const endpoint = value?.endpoint || `/${key}`;
-        sites.set(endpoint, replaced);
+        sites.set(endpoint, document?.documentElement?.outerHTML || page);
     }
 
     // Serve endpoints
