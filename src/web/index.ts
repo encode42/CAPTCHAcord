@@ -1,4 +1,4 @@
-import { Application, Context, Router } from "oak/mod.ts";
+import { Application, Context, Router, Request } from "oak/mod.ts";
 import { config, Guild } from "../config/index.ts";
 import { route as generic } from "./endpoints/generic/generic.ts";
 import { route as sites } from "./endpoints/generic/sites.ts";
@@ -17,7 +17,7 @@ async function init(): Promise<void> {
 
     // Logger
     app.use(async (context: Context, next: Function) => {
-        console.log(`${context.request.ip}: ${context.request.method} ${context.request.url}`);
+        console.log(`${getForwardedIP(context.request)}: ${context.request.method} ${context.request.url}`);
 
         try {
             await next();
@@ -39,4 +39,9 @@ async function init(): Promise<void> {
     console.log("Webserver is now listening to requests!");
 }
 
-export { init, app, router };
+function getForwardedIP(request: Request) {
+    const forwardedHeader = request.headers.get("X-Forwarded-For");
+    return forwardedHeader || request.ip;
+}
+
+export { init, app, router, getForwardedIP };

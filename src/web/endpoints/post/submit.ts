@@ -2,7 +2,7 @@ import { Context } from "oak/mod.ts";
 import { Request } from "request/mod.ts";
 import TTL from "ttl/mod.ts";
 import { create as createInvite } from "../../../bot/invite/create.ts";
-import { router } from "../../index.ts";
+import { router, getForwardedIP } from "../../index.ts";
 import { config, tokens } from "../../../config/index.ts";
 
 interface Grecaptcha {
@@ -33,14 +33,15 @@ function route(): void {
         }
 
         // Check if invite already created
-        const existingInvite = invites.get(context.request.ip)?.get(key);
+        const forwardedIP = getForwardedIP(context.request);
+        const existingInvite = invites.get(forwardedIP)?.get(key);
         if (existingInvite) {
             context.response.body = { url: existingInvite, isExisting: true };
             return;
         }
 
         // Verify the captcha
-        const verificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${tokens.recaptcha}&response=${captcha}&remoteip=${context.request.ip}`;
+        const verificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${tokens.recaptcha}&response=${captcha}&remoteip=${forwardedIP}`;
         const response: Grecaptcha = await Request.get(verificationURL);
 
         if (response.success) {
@@ -51,7 +52,7 @@ function route(): void {
             context.response.body = { url: url.get(key) };
 
             // Add to cache
-            invites.set(context.request.ip, url);
+            invites.set(forwardedIP, url);
         } else {
             // Invalid captcha
             captcha.response.status = 403;
