@@ -19,7 +19,12 @@ function route(): void {
 
     // Not found
     app.use(async (context: Context) => {
-        context.response.redirect("/not-found.html");
+        if (context.request.headers.get("accept")?.includes("text/html")) {
+            context.response.redirect("/not-found.html");
+            return;
+        }
+
+        context.response.status = 404;
     });
 }
 

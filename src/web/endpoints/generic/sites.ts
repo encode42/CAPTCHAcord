@@ -31,7 +31,7 @@ async function route(): Promise<void> {
     // Serve endpoints
     app.use(async (context: Context, next: Function) => {
         // Ensure headers and existence then serve
-        if (context.request.headers.get("accept")?.includes("text/html") && sites.has(context.request.url.pathname)) {
+        if (sites.has(context.request.url.pathname)) {
             context.response.body = sites.get(context.request.url.pathname);
         } else {
             await next();
