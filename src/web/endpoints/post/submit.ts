@@ -35,7 +35,7 @@ function route(): void {
         // Check if invite already created
         const existingInvite = invites.get(context.request.ip)?.get(key);
         if (existingInvite) {
-            context.response.body = { url: existingInvite };
+            context.response.body = { url: existingInvite, isExisting: true };
             return;
         }
 

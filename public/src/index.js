@@ -41,10 +41,17 @@ function onSubmit() {
         body: JSON.stringify(Object.fromEntries(data.entries()))
     }).then(async res => {
         if (res.ok) {
-            redirect.innerHTML = "Redirecting...";
+            // Parse the response
+            const json = await res.json();
+            if (json.isExisting) {
+                // The invite already exists
+                redirect.innerHTML = "Redirecting to existing invite...";
+                await new Promise(resolve => setTimeout(resolve, 1250));
+            } else {
+                redirect.innerHTML = "Redirecting...";
+            }
 
             // Redirect to invite
-            const json = await res.json();
             window.location = json.url;
         } else {
             // Display an error message
