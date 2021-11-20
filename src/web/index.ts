@@ -34,7 +34,6 @@ async function init(): Promise<void> {
     await sites();
     await generic();
 
-
     app.listen({ port: config.webserver.port });
     console.log("Webserver is now listening to requests!");
 }
