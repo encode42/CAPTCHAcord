@@ -3,9 +3,7 @@ import { Request } from "request/mod.ts";
 import TTL from "ttl/mod.ts";
 import { create as createInvite } from "../../bot/invite/create.ts";
 import { router } from "../index.ts";
-import { tokens } from "../../config/index.ts";
-
-const ttl = new TTL<string>(30_000);
+import { config, tokens } from "../../config/index.ts";
 
 interface Grecaptcha {
     success: boolean,
@@ -14,29 +12,30 @@ interface Grecaptcha {
     hostname: string
 }
 
+const invites: Map<String, TTL<URL>> = new Map();
+
 /**
  * Form submit endpoint
  */
 function route(): void {
     router.post("/submit", async (context: Context) => {
-        // Check if IP is in the cache
-        if (ttl.get(context.request.ip)) {
-            context.response.status = 429;
-            return;
-        }
-
-        // Add the IP to the cache
-        ttl.set(context.request.ip, "true");
-
         // Request body
         const req = await context.request.body().value;
 
-        // Captcha response
+        // Form response
         const captcha = req["g-recaptcha-response"];
+        const key = req["key"];
 
         // Invalid captcha response
-        if (!captcha) {
+        if (!captcha || !config.discord.guilds[key]) {
             context.response.status = 400;
+            return;
+        }
+
+        // Check if invite already created
+        const existingInvite = invites.get(context.request.ip)?.get(key);
+        if (existingInvite) {
+            context.response.body = { url: existingInvite };
             return;
         }
 
@@ -46,10 +45,13 @@ function route(): void {
 
         if (response.success) {
             // Create the invite
-            const url = await createInvite();
+            const url = await createInvite(key);
 
             // Respond with the link
-            context.response.body = { url: url };
+            context.response.body = { url: url.get(key) };
+
+            // Add to cache
+            invites.set(context.request.ip, url);
         } else {
             // Invalid captcha
             captcha.response.status = 403;

@@ -8,7 +8,7 @@ scripts:
     unstable: true
     imap: src/imports.json
     allow:
-      write: config/,public/src/key.js
+      write: config/
 
   watch:
     cmd: src/index.ts
@@ -16,4 +16,4 @@ scripts:
     imap: src/imports.json
     watch: true
     allow:
-      write: config/,public/src/key.js
+      write: config/

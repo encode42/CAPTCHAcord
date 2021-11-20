@@ -1,7 +1,7 @@
 # Webserver settings
 webserver:
   # Port the webserver listens on
-  port: 8081
+  port: 1337
 
 # reCAPTCHA settings
 recaptcha:
@@ -10,12 +10,15 @@ recaptcha:
 
 # Discord settings
 discord:
-  # Guild to create invites for. (Discord guild ID)
-  guild: ""
-
-  # Channel to create invite to. (Discord channel ID)
-  channel: ""
-
-  # Override the name of the guild displayed on the website.
-  # Defaults to the guild's display name if blank.
-  name: ""
+  # Guilds to provide endpoints for
+  guilds:
+    # id: Guild to create invites for. (Discord guild ID)
+    # channel: Channel to create invite to. (Discord channel ID)
+    # name: (optional) Override the name of the guild displayed on the website.
+    #       Defaults to the guild's display name if blank or non-existent.
+    # endpoint: (optional) Endpoint to attach and listen to. (HTTP location)
+    #           Defaults to the name of the key.
+    default:
+      id: ""
+      channel: ""
+      endpoint: "/"

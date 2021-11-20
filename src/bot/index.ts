@@ -25,15 +25,15 @@ async function init(): Promise<void> {
 }
 
 // Guild cache
-let guild: Guild;
+let guilds: Map<String, Guild> = new Map();
 
 // Get the guild
-async function getGuild(): Promise<Guild> {
-    if (!guild) {
-        guild = await client.guilds.fetch(config.discord.guild);
+async function getGuild(key: string): Promise<Guild> {
+    if (!guilds.has(key)) {
+        guilds.set(key, await client.guilds.fetch(config.discord.guilds[key].id));
     }
 
-    return guild;
+    return guilds.get(key)!;
 }
 
 export { init, client, getGuild };

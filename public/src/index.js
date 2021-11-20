@@ -32,6 +32,7 @@ async function onLoad() {
 function onSubmit() {
     const url = form.action;
     const data = new FormData(form);
+    data.append("key", key);
 
     // Create the invite
     fetch(url, {

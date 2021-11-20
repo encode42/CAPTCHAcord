@@ -12,11 +12,17 @@ interface Config {
         "site-key": string
     },
     discord: {
-        link: string,
-        guild: string,
-        channel: string,
-        name: string
+        guilds: {
+            [key: string]: Guild
+        }
     }
+}
+
+interface Guild {
+    id: string,
+    channel: string,
+    name?: string,
+    endpoint?: string
 }
 
 /**
@@ -69,9 +75,8 @@ async function init(): Promise<void> {
     config = loadYAML(configFile) as Config;
     tokens = loadYAML(tokensFile) as Tokens;
 
-
-
     console.log("Loaded the configuration files.");
 }
 
 export { init, config, tokens };
+export type { Guild };
