@@ -6,9 +6,7 @@ if ! command -v vr &> /dev/null; then
     deno run --allow-net --allow-read --allow-write=config/ --unstable --import-map=src/imports.json src/index.ts
 else
     ARG="start"
-    if [ "$1" == "watch" ]; then
-        ARG="watch"
-    fi
+    if [ -n "$1" ]; then ARG="$1"; fi
 
     vr run $ARG
 fi
