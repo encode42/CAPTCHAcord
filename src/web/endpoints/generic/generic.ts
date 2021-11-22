@@ -1,10 +1,13 @@
+import * as log from "log/mod.ts";
 import { Context } from "oak/mod.ts";
 import { app } from "../../index.ts";
 
 /**
  * Generic site routing
  */
-function route(): void {
+function init(): void {
+    log.debug("Initializing generic endpoints...");
+
     // Send the files if found
     app.use(async (context: Context, next: Function) => {
         try {
@@ -19,6 +22,8 @@ function route(): void {
 
     // Not found
     app.use(async (context: Context) => {
+        log.debug(`${context.request.url} does not exist, redirecting!`);
+
         if (context.request.headers.get("accept")?.includes("text/html")) {
             context.response.redirect("/not-found.html");
             return;
@@ -28,4 +33,4 @@ function route(): void {
     });
 }
 
-export { route };
+export { init };

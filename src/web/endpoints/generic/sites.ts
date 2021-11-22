@@ -1,3 +1,4 @@
+import * as log from "log/mod.ts";
 import { Context } from "oak/mod.ts";
 import { DOMParser } from "dom/deno-dom-wasm.ts";
 import { app } from "../../index.ts";
@@ -17,7 +18,9 @@ const sites: Map<String, String> = new Map();
 /**
  * Invite webpages endpoint
  */
-async function route(): Promise<void> {
+async function init(): Promise<void> {
+    log.debug("Initializing dynamic website endpoints...");
+
     // Initialize sites
     generate();
 
@@ -39,7 +42,7 @@ async function route(): Promise<void> {
  * Generate the endpoint sites
  */
 async function generate() {
-    console.log("Generating site data...");
+    log.debug("Generating dynamic sites...");
 
     // Get the endpoint file
     const page = Deno.readTextFileSync(endpoint);
@@ -55,25 +58,24 @@ async function generate() {
 
     // Generate data for each site
     for (const key of Object.keys(config.discord.guilds)) {
-        const value: Guild = config.discord.guilds[key];
-        const customName = value?.name !== undefined ? value.name : (await getGuild(key)).name;
+        log.debug(`Generating site for ${key}...`);
 
-        // Set the title
+        const value: Guild = config.discord.guilds[key];
+        const customName = value?.name !== undefined ? value.name : (await getGuild(key))?.name;
+
+        // Generate the site info
         if (title) {
-            title.innerHTML = title.innerHTML + (customName ? ` - ${customName}` : "");
+            title.innerHTML = title.innerHTML + (customName && ` - ${customName}`);
         }
 
-        // Fill the redirect message
         if (redirect) {
             redirect.innerHTML = `You will be redirected${customName && ` to ${customName}`} after solving a captcha.`;
         }
 
-        // Fill out captcha
         if (captcha) {
             captcha.attributes["data-sitekey"] = config.recaptcha["site-key"];
         }
 
-        // Set the site key
         if (siteKey) {
             siteKey.attributes.value = key;
         }
@@ -91,10 +93,10 @@ async function watch() {
     const watcher = Deno.watchFs(endpoint);
     for await (const event of watcher) {
         if (event.kind === "modify") {
-            console.log(`Reloading ${endpoint}...`)
+            log.debug(`Changed detected in ${endpoint}! Reloading...`);
             generate();
         }
     }
 }
 
-export { route };
+export { init };
