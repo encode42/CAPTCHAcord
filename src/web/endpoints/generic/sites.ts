@@ -42,12 +42,25 @@ async function generate() {
     // Get the endpoint file
     const page = Deno.readTextFileSync(endpoint);
     const document = new DOMParser().parseFromString(page, "text/html");
+    const title = document?.getElementsByTagName("title")[0];
+    const redirect = document?.getElementById("redirect");
     const captcha = document?.getElementsByClassName("g-recaptcha")[0];
     const script = document?.getElementById("data-script");
 
     // Generate data for each site
     for (const key of Object.keys(config.discord.guilds)) {
         const value: Guild = config.discord.guilds[key];
+        const customName = value?.name !== undefined ? value.name : (await getGuild(key)).name;
+
+        // Set the title
+        if (title) {
+            title.innerHTML = title.innerHTML + (customName ? ` - ${customName}` : "");
+        }
+
+        // Fill the redirect message
+        if (redirect) {
+            redirect.innerHTML = `You will be redirected${customName && ` to ${customName}`} after solving a captcha.`;
+        }
 
         // Fill out captcha
         if (captcha) {
@@ -57,7 +70,6 @@ async function generate() {
         // Generate site data
         if (script) {
             script.innerHTML = `
-                const serverName = "${value?.name || (await getGuild(key)).name}";
                 const key = "${key}";
             `;
         }

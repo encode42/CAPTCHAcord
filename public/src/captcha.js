@@ -1,21 +1,6 @@
 const form = document.getElementById("form");
 const redirect = document.getElementById("redirect");
 
-// Run the captcha
-window.addEventListener("load", () => {
-    const script = document.createElement("script");
-    script.src = "https://www.google.com/recaptcha/api.js?onload=onLoad";
-
-    form.append(script);
-
-    if (serverName) {
-        const title = document.getElementsByTagName("title")[0];
-        title.innerHTML = `${serverName} - ${title.innerHTML}`;
-    }
-
-    redirect.innerHTML = `You will be redirected${serverName ? ` to ${serverName} ` : ""} after solving a captcha.`;
-});
-
 // Method ran when the captcha script is loaded
 async function onLoad() {
     grecaptcha.execute();
@@ -40,7 +25,6 @@ async function onSubmit() {
             if (json.isExisting) {
                 // The invite already exists
                 redirect.innerHTML = "Redirecting to existing invite...";
-                await new Promise(resolve => setTimeout(resolve, 1250));
             }
 
             // Redirect to invite
