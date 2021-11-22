@@ -25,12 +25,11 @@ async function onLoad() {
 async function onSubmit() {
     redirect.innerHTML = "Redirecting...";
 
-    const url = form.action;
     const data = new FormData(form);
     data.append("key", key);
 
     // Create the invite
-    fetch(url, {
+    fetch(form.action, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(Object.fromEntries(data.entries()))
@@ -57,16 +56,7 @@ async function onSubmit() {
 
 function displayError(response) {
     redirect.innerHTML = "An error occurred. Refresh the page or contact the instance owner.";
-
-    if (response instanceof Response) {
-        if (response.error) {
-            console.error(response.error());
-        }
-
-        return;
-    }
-
-    console.error(response);
+    console.error(response?.error() || response);
 }
 
 // Make above functions global
