@@ -39,13 +39,19 @@ async function route(): Promise<void> {
  * Generate the endpoint sites
  */
 async function generate() {
+    console.log("Generating site data...");
+
     // Get the endpoint file
     const page = Deno.readTextFileSync(endpoint);
     const document = new DOMParser().parseFromString(page, "text/html");
     const title = document?.getElementsByTagName("title")[0];
     const redirect = document?.getElementById("redirect");
     const captcha = document?.getElementsByClassName("g-recaptcha")[0];
-    const script = document?.getElementById("data-script");
+    const siteKey = document?.getElementById("key");
+
+    if (siteKey) {
+        siteKey.attributes.name = "key";
+    }
 
     // Generate data for each site
     for (const key of Object.keys(config.discord.guilds)) {
@@ -67,11 +73,9 @@ async function generate() {
             captcha.attributes["data-sitekey"] = config.recaptcha["site-key"];
         }
 
-        // Generate site data
-        if (script) {
-            script.innerHTML = `
-                const key = "${key}";
-            `;
+        // Set the site key
+        if (siteKey) {
+            siteKey.attributes.value = key;
         }
 
         // Import the script

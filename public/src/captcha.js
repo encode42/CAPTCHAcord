@@ -10,14 +10,11 @@ async function onLoad() {
 async function onSubmit() {
     redirect.innerHTML = "Redirecting...";
 
-    const data = new FormData(form);
-    data.append("key", key);
-
-    // Create the invite
+    // Submit the form to create invite
     fetch(form.action, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(Object.fromEntries(data.entries()))
+        body: JSON.stringify(Object.fromEntries(new FormData(form).entries()))
     }).then(async res => {
         if (res.ok) {
             // Parse the response

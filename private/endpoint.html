@@ -9,11 +9,11 @@
             <p id="redirect"></p>
             <form action="/submit" id="form">
                 <div class="g-recaptcha" data-callback="onSubmit" data-size="invisible"></div>
+                <input type="hidden" id="key"/>
             </form>
         </main>
 
         <script src="https://www.google.com/recaptcha/api.js?onload=onLoad"></script>
-        <script id="data-script"></script>
         <script type="module" src="/src/captcha.js"></script>
     </body>
 </html>
