@@ -3,16 +3,9 @@ const redirect = document.getElementById("redirect");
 
 // Run the captcha
 window.addEventListener("load", () => {
-    const captcha = document.createElement("div");
-    captcha.className = "g-recaptcha";
-    captcha.dataset.callback = "onSubmit";
-    captcha.dataset.size = "invisible";
-    captcha.dataset.sitekey = siteKey;
-
     const script = document.createElement("script");
     script.src = "https://www.google.com/recaptcha/api.js?onload=onLoad";
 
-    form.append(captcha);
     form.append(script);
 
     if (serverName) {

@@ -7,7 +7,9 @@
         <main>
             <h1>CAPTCHAcord</h1>
             <p id="redirect"></p>
-            <form action="/submit" id="form"></form>
+            <form action="/submit" id="form">
+                <div class="g-recaptcha" data-callback="onSubmit" data-size="invisible"></div>
+            </form>
         </main>
 
         <script id="data-script"></script>

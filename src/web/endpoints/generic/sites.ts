@@ -42,16 +42,21 @@ async function generate() {
     // Get the endpoint file
     const page = Deno.readTextFileSync(endpoint);
     const document = new DOMParser().parseFromString(page, "text/html");
+    const captcha = document?.getElementsByClassName("g-recaptcha")[0];
     const script = document?.getElementById("data-script");
 
     // Generate data for each site
     for (const key of Object.keys(config.discord.guilds)) {
         const value: Guild = config.discord.guilds[key];
 
+        // Fill out captcha
+        if (captcha) {
+            captcha.attributes["data-sitekey"] = config.recaptcha["site-key"];
+        }
+
         // Generate site data
         if (script) {
             script.innerHTML = `
-                const siteKey = "${config.recaptcha["site-key"]}";
                 const serverName = "${value?.name || (await getGuild(key)).name}";
                 const key = "${key}";
             `;
