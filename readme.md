@@ -40,7 +40,8 @@ As always, you're recommended to create a backup of your instance first, but eve
 How do I change how the site looks?
 </summary>
 
-Open the `public` directory and edit `style.css` or `index.html` to your liking! These files are static, they will never be overwritten.
+Changes to in the `public` and `private` directories will never be modified, unless a commit changes said files.
+All dynamic routes, strings, etc. are generated in code and are harder to modify.
 </details>
 
 <details>
@@ -48,7 +49,30 @@ Open the `public` directory and edit `style.css` or `index.html` to your liking!
 Is it possible to redirect to more than one server?
 </summary>
 
-Not with a single instance. As it stands currently, you must host a single instance for each server you connect to the bot.
+Yes! In your `config.yml`, you can define multiple routes in the `discord.guilds` key. Keep in mind, the bot needs to be in each server and have sufficient permissions.
 
-This may change in the future, though.
+Example config:
+```yaml
+# Discord settings
+discord:
+  # Guilds to provide endpoints for
+  guilds:
+    # id: Guild to create invites for. (Discord guild ID)
+    # channel: Channel to create invite to. (Discord channel ID)
+    # name: (optional) Override the name of the guild displayed on the website.
+    #       Defaults to the guild's display name if non-existent.
+    # endpoint: (optional) Endpoint to attach and listen to. (HTTP location)
+    #           Defaults to the name of the key.
+    default:
+      id: "684495087534866437"
+      channel: "684550338291957896"
+      endpoint: "/my-server"
+
+    test:
+      id: "365455168583499776"
+      channel: "365455168583499779"
+      name: ""
+```
+
+This will redirect `/my-server` to the guild `684495087534866437`, and `/test` to `365455168583499776`!
 </details>
