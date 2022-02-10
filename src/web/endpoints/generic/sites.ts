@@ -2,18 +2,18 @@ import * as log from "log/mod.ts";
 import { Context } from "oak/mod.ts";
 import { DOMParser } from "dom/deno-dom-wasm.ts";
 import { app } from "../../index.ts";
-import { config, Guild } from "../../../config/index.ts";
+import { config, domains, Guild } from "../../../config/index.ts";
 import { getGuild } from "../../../bot/index.ts";
 
 /**
  * Endpoint page to serve
  */
-const endpoint = `${Deno.cwd()}/private/endpoint.html`;
+const template = `${Deno.cwd()}/private/endpoint.html`;
 
 /**
- * Generated and cached sites
+ * Generated and cached endpoints
  */
-const sites: Map<String, String> = new Map();
+const endpoints = new Map<string, Map<string, string>>();
 
 /**
  * Invite webpages endpoint
@@ -29,9 +29,13 @@ async function init(): Promise<void> {
 
     // Serve endpoints
     app.use(async (context: Context, next: Function) => {
-        // Ensure headers and existence then serve
-        if (sites.has(context.request.url.pathname)) {
-            context.response.body = sites.get(context.request.url.pathname);
+        // Get endpoints for domain
+        const endpoint = endpoints.has(context.request.url.hostname) ? endpoints.get(context.request.url.hostname) : endpoints.get("default");
+
+        // Check if endpoint exists
+        if (endpoint?.has(context.request.url.pathname)) {
+            // Serve the file
+            context.response.body = endpoint.get(context.request.url.pathname);
         } else {
             await next();
         }
@@ -45,7 +49,7 @@ async function generate() {
     log.debug("Generating dynamic sites...");
 
     // Get the endpoint file
-    const page = Deno.readTextFileSync(endpoint);
+    const page = Deno.readTextFileSync(template);
     const document = new DOMParser().parseFromString(page, "text/html");
     const title = document?.getElementsByTagName("title")[0];
     const redirect = document?.getElementById("redirect");
@@ -57,32 +61,42 @@ async function generate() {
     }
 
     // Generate data for each site
-    for (const key of Object.keys(config.discord.guilds)) {
-        log.debug(`Generating site for ${key}...`);
+    for (const [key, value] of Object.entries(domains)) {
+        const domainMap = new Map<string, string>();
 
-        const value: Guild = config.discord.guilds[key];
-        const customName = value?.name !== undefined ? value.name : (await getGuild(key))?.name;
+        for (const endpoint of value) {
+            log.debug(`Generating site for ${endpoint}...`);
 
-        // Generate the site info
-        if (title) {
-            title.innerHTML = title.innerHTML + (customName && ` - ${customName}`);
+            let customName;
+            if (endpoint.name) {
+                customName = endpoint.name;
+            } else if (endpoint.key) {
+                const guild = await getGuild(endpoint.key);
+                customName = guild?.name;
+            }
+
+            // Generate the site info
+            if (title) {
+                title.innerHTML = title.innerHTML + (customName && ` - ${customName}`);
+            }
+
+            if (redirect) {
+                redirect.innerHTML = `You will be redirected${customName && ` to ${customName}`} after solving a captcha.`;
+            }
+
+            if (captcha) {
+                captcha.attributes["data-sitekey"] = config.recaptcha["site-key"];
+            }
+
+            if (siteKey && endpoint.key) {
+                siteKey.attributes.value = endpoint.key;
+            }
+
+            // Done!
+            domainMap.set(endpoint?.endpoint || `/${endpoint.key}`, document?.documentElement?.outerHTML || page);
         }
 
-        if (redirect) {
-            redirect.innerHTML = `You will be redirected${customName && ` to ${customName}`} after solving a captcha.`;
-        }
-
-        if (captcha) {
-            captcha.attributes["data-sitekey"] = config.recaptcha["site-key"];
-        }
-
-        if (siteKey) {
-            siteKey.attributes.value = key;
-        }
-
-        // Import the script
-        const endpoint = value?.endpoint || `/${key}`;
-        sites.set(endpoint, document?.documentElement?.outerHTML || page);
+        endpoints.set(key, domainMap);
     }
 }
 
@@ -90,10 +104,10 @@ async function generate() {
  * Watch for endpoint file changes
  */
 async function watch() {
-    const watcher = Deno.watchFs(endpoint);
+    const watcher = Deno.watchFs(template);
     for await (const event of watcher) {
         if (event.kind === "modify") {
-            log.debug(`Changed detected in ${endpoint}! Reloading...`);
+            log.debug(`Changed detected in ${template}! Reloading...`);
             generate();
         }
     }

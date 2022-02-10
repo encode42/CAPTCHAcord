@@ -18,7 +18,10 @@ discord:
     #       Defaults to the guild's display name if blank or non-existent.
     # endpoint: (optional) Endpoint to attach and listen to. (HTTP location)
     #           Defaults to the name of the key.
+    # domain: (optional) The (sub) domain this route applies to.
+    #         Defaults to any unmatched domains.
     default:
       id: ""
       channel: ""
       endpoint: "/"
+      domain: ""

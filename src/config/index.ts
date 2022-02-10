@@ -6,24 +6,26 @@ import { parse as loadYAML } from "encoding/yaml.ts";
  * Guild config structure.
  */
 interface Guild {
-    id: string,
-    channel: string,
-    name?: string,
-    endpoint?: string
+    "id": string,
+    "channel": string,
+    "name"?: string,
+    "endpoint"?: string,
+    "domain"?: string,
+    "key"?: string
 }
 
 /**
  * Config file interface.
  */
 interface Config {
-    webserver: {
-        port: number
+    "webserver": {
+        "port": number
     },
-    recaptcha: {
+    "recaptcha": {
         "site-key": string
     },
-    discord: {
-        guilds: {
+    "discord": {
+        "guilds": {
             [key: string]: Guild
         }
     }
@@ -33,19 +35,31 @@ interface Config {
  * Tokens file interface.
  */
 interface Tokens {
-    recaptcha: string,
-    discord: string
+    "recaptcha": string,
+    "discord": string
+}
+
+interface Domains {
+    [key: string]: Guild[],
+    "default": Guild[]
 }
 
 /**
- * Captcha's configuration.
+ * CAPTCHAcord's configuration.
  */
 let config: Config;
 
 /**
- * Captcha's private tokens.
+ * CAPTCHAcord's private tokens.
  */
 let tokens: Tokens;
+
+/**
+ * Domains to utilize.
+ */
+const domains: Domains = {
+    "default": []
+};
 
 /**
  * Initialize the configuration files.
@@ -77,7 +91,7 @@ async function init(): Promise<void> {
     }
 
     // Read the config files
-    log.debug("Reading configuration files...")
+    log.debug("Reading configuration files...");
     const configFile = await Deno.readTextFile("config/config.yml");
     const tokensFile = await Deno.readTextFile("config/tokens.yml");
 
@@ -85,8 +99,29 @@ async function init(): Promise<void> {
     config = loadYAML(configFile) as Config;
     tokens = loadYAML(tokensFile) as Tokens;
 
+    // Iterate each domain's endpoints
+    for (const [key, value] of Object.entries(config.discord.guilds)) {
+        const guild = config.discord.guilds[key];
+        const domain = value.domain;
+
+        guild.key = key;
+
+        // Domain specified
+        if (domain) {
+            // Create array for domain endpoints
+            if (!domains[domain]) {
+                domains[domain] = [];
+            }
+
+            domains[domain].push(guild);
+        } else {
+            // Default domain
+            domains.default.push(guild);
+        }
+    }
+
     log.info("Configuration files are ready!");
 }
 
-export { init, config, tokens };
+export { init, config, tokens, domains };
 export type { Guild };

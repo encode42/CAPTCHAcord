@@ -1,2 +1,5 @@
-recaptcha: "" # reCAPTCHA private key
-discord: "" # Discord bot token
+# reCAPTCHA private key
+recaptcha: ""
+
+# Discord bot token
+discord: ""
