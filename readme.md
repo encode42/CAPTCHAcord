@@ -2,6 +2,10 @@
 [Discord Badge]: https://img.shields.io/discord/646517284453613578?color=7289da&labelColor=7289da&label=​&logo=discord&logoColor=white&style=flat-square
 [Codacy]: https://app.codacy.com/gh/Encode42/CAPTCHAcord
 [Codacy Badge]: https://img.shields.io/codacy/grade/79f97c356b6a47fc9251096465e3b7f0?color=172B4D&labelColor=172B4D&label=​&logo=codacy&style=flat-square
+[Kevlar]: https://kevlar.to
+
+> ### ⚠️ Deprecation Notice
+> This is being replaced by [Kevlar], a web-based alternative.
 
 <img src=".github/assets/badge.png" width="200px" align="left">
 
